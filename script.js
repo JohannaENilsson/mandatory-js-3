@@ -3,7 +3,7 @@ const BASE_URL = "https://dog.ceo/api/";
 // Create li
 function createDogs(dogBreed) {
   let li = document.createElement("li");
-  li.textContent = dogBreed;
+  li.textContent = dogBreed.replace(/^./, dogBreed[0].toUpperCase());
   return li;
 }
 
@@ -12,7 +12,7 @@ function createDogsIMG(img) {
 let div = document.createElement('div');
 let p = document.createElement('p');
 let breedText = img.toUpperCase().split('/');
-console.log(breedText);
+// console.log(breedText);
 p.textContent = breedText[4];
 
     //   console.log(img);
@@ -35,17 +35,20 @@ function renderAllDogs(allDogs) {
       let dogLi = createDogs(dogBreed);
       dogsInUl.appendChild(dogLi);
 
-      // if (allDogs.hasOwnProperty(dogBreed)) {
-      //   let subBreeds = allDogs[dogBreed];
-      //   console.log(subBreeds);
-      //   for (let subBreed of subBreeds) {
-      //     //   console.log(subBreed);
-      //     // let subBreedUl = document.createElement("ul");
-      //     // dogLi.appendChild(subBreedUl);
-      //     //   let subBreedLi = createDogs(subBreed);
-      //     //   subBreedUl.appendChild(subBreedLi);
-      //   }
-      // }
+      allDogs.hasOwnProperty(dogBreed)
+      let subBreeds = allDogs[dogBreed];
+      // console.log(subBreeds);
+      if (subBreeds.length > 0) {
+        
+        console.log(subBreeds);
+        // for (let subBreed of subBreeds) {
+          //   console.log(subBreed);
+          // let subBreedUl = document.createElement("ul");
+          // dogLi.appendChild(subBreedUl);
+          //   let subBreedLi = createDogs(subBreed);
+          //   subBreedUl.appendChild(subBreedLi);
+        // }
+      }
     }
   }
 }
@@ -62,13 +65,13 @@ function renderAllDogsIMG(allIMGS) {
   });
   mainImg.appendChild(newDogs);
 
-  console.log(allIMGS);
+  // console.log(allIMGS);
   for (let dogImg in allIMGS) {
     if (allIMGS.hasOwnProperty(dogImg)) {
       let img = allIMGS[dogImg];
     //   console.log(img);
       let imgDog = createDogsIMG(img);
-      console.log(imgDog);
+      // console.log(imgDog);
       mainImg.appendChild(imgDog);
     }
   }
