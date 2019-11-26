@@ -55,6 +55,13 @@ function renderAllDogsIMG(allIMGS) {
   let mainImg = document.querySelector("main");
   mainImg.innerHTML = "";
 
+  let newDogs = document.createElement('button');
+  newDogs.textContent = 'Get new dogs';
+  newDogs.addEventListener('click', function(){
+    getAllDogsImg();
+  });
+  mainImg.appendChild(newDogs);
+
   console.log(allIMGS);
   for (let dogImg in allIMGS) {
     if (allIMGS.hasOwnProperty(dogImg)) {
