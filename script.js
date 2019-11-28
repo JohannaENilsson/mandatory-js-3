@@ -66,20 +66,20 @@ function renderAllDogsIMG(allIMGS) {
   mainImg.appendChild(newDogs);
 
   // console.log(allIMGS);
-  for (let dogImg in allIMGS) {
-    if (allIMGS.hasOwnProperty(dogImg)) {
-      let img = allIMGS[dogImg];
-    //   console.log(img);
-      let imgDog = createDogsIMG(img);
-      // console.log(imgDog);
-      mainImg.appendChild(imgDog);
+  for (let img of allIMGS) { 
+      if (img) {
+        console.log(img);
+        let imgDog = createDogsIMG(img);
+        // console.log(imgDog);
+        mainImg.appendChild(imgDog);
+      }
     }
-  }
 }
 
 // GET TEXT
 function getAllDogs() {
-  axios.get(`${BASE_URL}breeds/list/all`).then(response => {
+  axios.get(`${BASE_URL}breeds/list/all`)
+  .then(response => {
     let allDogs = response.data.message;
     console.log(allDogs);
     renderAllDogs(allDogs);
@@ -88,7 +88,8 @@ function getAllDogs() {
 
 // GET Random IMG
 function getAllDogsImg() {
-  axios.get(`${BASE_URL}breeds/image/random/3`).then(response => {
+  axios.get(`${BASE_URL}breeds/image/random/3`)
+  .then(response => {
     let allIMGS = response.data.message;
     // console.log(allIMGS);
     renderAllDogsIMG(allIMGS);
