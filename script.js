@@ -37,10 +37,16 @@ function renderAllDogs(allDogs) {
     dogsInUl.appendChild(dogLi);
 
     dogLi.addEventListener("click", function(e) {
+      console.log("target", e.target);
+      
+      if(e.target.parentNode.className.includes("SubDogsInUl")) {
+        return;
+      }
+      
       console.log(dogLi);
       // console.log(this.textContent);
       window.location.hash = dogBreed; // # BREEDEN
-      getBreedImg(dogBreed);
+      // getBreedImg(dogBreed);
       createHeadline(dogBreed); //
       getHoundList(dogBreed, e); // skickar in vilken breed som ska hämtas hem
     });
@@ -97,7 +103,7 @@ startPage.addEventListener("click", function() {
   // kommer tillbaka till första sidan
   window.location.href = "./"; // går till startsidan
   getAllDogs();
-  getAllDogsImg();
+  // getAllDogsImg();
 });
 
 // GET TEXT
@@ -117,103 +123,103 @@ function getHoundList(dogBreed, e) {
   });
 }
 
-// // ********** BILDER *******
-// // // Create IMG
-function createDogsIMG(img) {
-  let div = document.createElement("div");
-  let p = document.createElement("p");
-  let breedText = img.toUpperCase().split("/");
-  // console.log(breedText);
-  p.textContent = breedText[4];
+// // // ********** BILDER *******
+// // // // Create IMG
+// function createDogsIMG(img) {
+//   let div = document.createElement("div");
+//   let p = document.createElement("p");
+//   let breedText = img.toUpperCase().split("/");
+//   // console.log(breedText);
+//   p.textContent = breedText[4];
 
-  //   console.log(img);
-  let imgDom = document.createElement("img");
-  imgDom.setAttribute("src", img);
-  div.appendChild(imgDom);
-  div.appendChild(p);
+//   //   console.log(img);
+//   let imgDom = document.createElement("img");
+//   imgDom.setAttribute("src", img);
+//   div.appendChild(imgDom);
+//   div.appendChild(p);
 
-  return div;
-}
+//   return div;
+// }
 
-// // // Render all dog IMG
-function renderAllDogsIMG(allIMGS) {
-  let containerImg = document.querySelector(".imgContainer");
-  containerImg.innerHTML = "";
+// // // // Render all dog IMG
+// function renderAllDogsIMG(allIMGS) {
+//   let containerImg = document.querySelector(".imgContainer");
+//   containerImg.innerHTML = "";
 
-  let newDogs = document.createElement("button");
-  newDogs.textContent = "Get new dogs";
-  newDogs.addEventListener("click", function() {
-    getAllDogsImg();
-  });
-  containerImg.appendChild(newDogs);
+//   let newDogs = document.createElement("button");
+//   newDogs.textContent = "Get new dogs";
+//   newDogs.addEventListener("click", function() {
+//     getAllDogsImg();
+//   });
+//   containerImg.appendChild(newDogs);
 
-  // console.log(allIMGS);
-  for (let img of allIMGS) {
-    if (img) {
-      // console.log(img);
-      let imgDog = createDogsIMG(img);
-      // console.log(imgDog);
-      containerImg.appendChild(imgDog);
-    }
-  }
-}
+//   // console.log(allIMGS);
+//   for (let img of allIMGS) {
+//     if (img) {
+//       // console.log(img);
+//       let imgDog = createDogsIMG(img);
+//       // console.log(imgDog);
+//       containerImg.appendChild(imgDog);
+//     }
+//   }
+// }
 
-// // // Render breeds dog IMG
-function renderBreedsDogsIMG(allIMGS) {
-  let containerImg = document.querySelector(".imgContainer");
-  containerImg.innerHTML = "";
-  let newDogs = document.createElement("button");
-  newDogs.textContent = "Get new dogs";
-  containerImg.appendChild(newDogs);
+// // // // Render breeds dog IMG
+// function renderBreedsDogsIMG(allIMGS) {
+//   let containerImg = document.querySelector(".imgContainer");
+//   containerImg.innerHTML = "";
+//   let newDogs = document.createElement("button");
+//   newDogs.textContent = "Get new dogs";
+//   containerImg.appendChild(newDogs);
 
-  // console.log(allIMGS);
-  for (let img of allIMGS) {
+//   // console.log(allIMGS);
+//   for (let img of allIMGS) {
 
-//     // slica ut img
-    let breed = img.split('/'); // tar ut breeeden från img strängen
-    //console.log(breed[4]);
-    newDogs.addEventListener("click", function() { // random breeds bilder
-      getBreedImg(breed[4]);
-    });
-    if (img) {
-      // console.log('LOOP ' + img);
-      let imgDog = createDogsIMG(img);
-      // console.log(imgDog);
-      containerImg.appendChild(imgDog);
-    }
-  }
-}
+// //     // slica ut img
+//     let breed = img.split('/'); // tar ut breeeden från img strängen
+//     //console.log(breed[4]);
+//     newDogs.addEventListener("click", function() { // random breeds bilder
+//       getBreedImg(breed[4]);
+//     });
+//     if (img) {
+//       // console.log('LOOP ' + img);
+//       let imgDog = createDogsIMG(img);
+//       // console.log(imgDog);
+//       containerImg.appendChild(imgDog);
+//     }
+//   }
+// }
 
-// // Render breed
+// // // Render breed
 
-// // GET Random IMG
-function getAllDogsImg() {
-  axios.get(`${BASE_URL}breeds/image/random/3`)
-  .then(response => {
-    let allIMGS = response.data.message;
-    // console.log(allIMGS);
-    renderAllDogsIMG(allIMGS);
-  });
-}
-// https://dog.ceo/api/breed/hound/images/random/3
-// // GET BREED IMG
-function getBreedImg(breed) {
-  // console.log('Input GET breed' + breed);
-  axios.get(`${BASE_URL}breed/${breed}/images/random/3`)
-  .then(response => {
-    let allIMGS = response.data.message;
-    // console.log('IMG breeds ' + allIMGS);
-    renderBreedsDogsIMG(allIMGS);
-  });
-}
+// // // GET Random IMG
+// function getAllDogsImg() {
+//   axios.get(`${BASE_URL}breeds/image/random/3`)
+//   .then(response => {
+//     let allIMGS = response.data.message;
+//     // console.log(allIMGS);
+//     renderAllDogsIMG(allIMGS);
+//   });
+// }
+// // https://dog.ceo/api/breed/hound/images/random/3
+// // // GET BREED IMG
+// function getBreedImg(breed) {
+//   // console.log('Input GET breed' + breed);
+//   axios.get(`${BASE_URL}breed/${breed}/images/random/3`)
+//   .then(response => {
+//     let allIMGS = response.data.message;
+//     // console.log('IMG breeds ' + allIMGS);
+//     renderBreedsDogsIMG(allIMGS);
+//   });
+// }
 
 let dogId = window.location.hash;
 if (dogId) {
   dogId = dogId.substring(1);
   getAllDogs(dogId);
-  getAllDogsImg(dogId);
+  // getAllDogsImg(dogId);
 } else {
   getAllDogs();
-  getAllDogsImg();
+  // getAllDogsImg();
   getHoundList();
 }
