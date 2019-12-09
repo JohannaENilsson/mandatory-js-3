@@ -8,6 +8,7 @@ function createDogs(dogBreed) {
   // skapar alla
   // console.log(`All LI ${dogBreed}`);
   let li = document.createElement("li");
+  li.setAttribute('data-name', dogBreed);
   li.textContent = capitalize(dogBreed);
   return li;
 }
@@ -16,6 +17,7 @@ function createDogs(dogBreed) {
 function createSubDogs(subBreeds) {
   // console.log(`SUBBRED ${subBreeds}`);
   let liSub = document.createElement("li");
+  liSub.setAttribute("data-name", subBreeds);
   liSub.textContent = capitalize(subBreeds);
   return liSub;
 }
@@ -45,9 +47,6 @@ function renderAllDogs(allDogs) {
       if (e.target.parentNode.className.includes("SubDogsInUl")) {
         return;
       }
-
-      // console.log(dogLi);
-      // console.log(this.textContent);
       window.location.hash = dogBreed; // # BREEDEN
       getBreedImg(dogBreed);
       createHeadline(dogBreed); //
@@ -76,33 +75,30 @@ function renderSubBreeds(houndList, e) {
       // console.log(liHound);
 
       liHound.addEventListener("click", function(e) {
-// PARENT + E-TARGET
-
-        // console.log(window.location.hash = `${li.innerText}-${hound}`); 
-        console.log(this.innerText);
-        let CloseParent = document.querySelector('.SubDogsInUl').parentElement.innerHTML; //****************** få parenten att också lägga sig i
-        // console.log(CloseParent);
-        let splitFrom = CloseParent.split('<');
-        // console.log(splitFrom[0]);
-        let subbName = splitFrom[0].toLowerCase() + '/' + hound;
-        console.log(subbName);
-        window.location.hash = subbName; 
-        console.log(dogId);
-
-
+        let searchString = combinedDogs(e.target);
         
-         
-        // if (e.target.parentNode.className.includes("SubDogsInUl")) {
-        //   return;
-        // }
-        // console.log(this.closest('.SubDogsInUl').parentElement);
-        // ulBreed.innerHTML = "";
-        // 3 olika hund bilder
-        createHeadline(hound); //
-        getSubBreedImg(subbName); // + Breeden (parent)
+        window.location.hash = searchString; 
+        createHeadline(hound);
+        getSubBreedImg(searchString); 
       });
     }
   }
+}
+
+function combinedDogs(li) {
+  let child = getDogName(li);
+  let parentElement = li.parentElement.parentElement;
+  let parent = getDogName(parentElement);
+  let combined = `${parent}/${child}`;
+
+  return combined;  
+}
+
+function getDogName(li) {
+  let dogName = li.getAttribute('data-name');
+  console.log(dogName);
+  return dogName;
+  
 }
 
 // sätter h1
@@ -156,16 +152,17 @@ function createDogsIMG(img) {
   return div;
 }
 
-function randomImg(dogId){
-  let containerImg = document.querySelector(".imgContainer");
-  containerImg.innerHTML = "";
-  
+// function randomImg(breed, hound){
+//   //   if(breed) {
+//   //   getBreedImg(breed) 
+//   // } else if (hound) {
+//   //   getSubBreedImg(hound)
+//   // } else {
+//     getAllDogsImg()
+//   // }
+// }
+// let newDogs = document.querySelector(".imgContainer button");
 
-  newDogs.addEventListener("click", function() {
-    getAllDogsImg();
-  });
-  containerImg.appendChild(newDogs);
-}
 
 // // // Render all dog IMG
 function renderAllDogsIMG(allIMGS) {
@@ -179,7 +176,6 @@ function renderAllDogsIMG(allIMGS) {
   });
   containerImg.appendChild(newDogs);
 
-  // console.log(allIMGS);
   for (let img of allIMGS) {
     if (img) {
       // console.log(img);
@@ -200,13 +196,14 @@ function renderBreedsDogsIMG(allIMGS) {
 
   // console.log(allIMGS);
   for (let img of allIMGS) {
-    //     // slica ut img
+        // slica ut img
     let breed = img.split("/"); // tar ut breeden från img strängen
     // console.log(breed[4]);
-    newDogs.addEventListener("click", function() {
+    newDogs.addEventListener("click", function(e) {
       // random breeds bilder
       getBreedImg(breed[4]);
-    });
+      });
+
     if (img) {
       // console.log('LOOP ' + img);
       let imgDog = createDogsIMG(img);
@@ -225,7 +222,7 @@ function getAllDogsImg() {
     renderAllDogsIMG(allIMGS);
   });
 }
-// https://dog.ceo/api/breed/hound/images/random/3
+
 // // GET BREED IMG
 function getBreedImg(breed) {
   // console.log('Input GET breed' + breed);
@@ -237,9 +234,6 @@ function getBreedImg(breed) {
 }
 
 // GET SUB_BREED IMG
-//https://dog.ceo/api/breed/hound/afghan/images
-// https://dog.ceo/api/breed/hound/afghan/images/random/3
-//https://dog.ceo/api/cattledog/australian/images/random/3
 function getSubBreedImg(hound) {
   // console.log('Input GET breed' + breed);
   axios.get(`${BASE_URL}breed/${hound}/images/random/3`).then(response => {
@@ -249,12 +243,7 @@ function getSubBreedImg(hound) {
   });
 }
 
-// Funktion för att
-// function reLoadPageWithHash(dogId) {
-//   window.location.href = `./${dogId}`;
-// }
 
-// Om dogId finns i houndlist rendera den.
 if (dogId) {
   dogId = dogId.substring(1);
   getAllDogs(dogId);
