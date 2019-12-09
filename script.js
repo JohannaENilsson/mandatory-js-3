@@ -4,7 +4,6 @@ let dogId = window.location.hash; // vilken hund vi är på
 // ******** TEXTEN *******
 
 // 1. Skapar alla hundar i li
-// 2. Lägger in texten. Första bokstav Versal
 function createDogs(dogBreed) {
   // skapar alla
   // console.log(`All LI ${dogBreed}`);
@@ -14,13 +13,14 @@ function createDogs(dogBreed) {
 }
 
 // 1. Skapar alla Sub-breeds
-// 2. Lägger in texten. Första bokstav Versal
 function createSubDogs(subBreeds) {
   // console.log(`SUBBRED ${subBreeds}`);
   let liSub = document.createElement("li");
   liSub.textContent = capitalize(subBreeds);
   return liSub;
 }
+
+// Versal
 function capitalize(subBreeds) {
   return subBreeds.charAt(0).toUpperCase() + subBreeds.slice(1);
   }
@@ -46,7 +46,7 @@ function renderAllDogs(allDogs) {
         return;
       }
 
-      console.log(dogLi);
+      // console.log(dogLi);
       // console.log(this.textContent);
       window.location.hash = dogBreed; // # BREEDEN
       getBreedImg(dogBreed);
@@ -63,6 +63,7 @@ function renderSubBreeds(houndList, e) {
   let ulBreed = document.querySelector(".SubDogsInUl");
   ulBreed.innerHTML = "";
   let li = e.target;
+  
   // console.log(houndList);
 
   for (let hound of houndList) {
@@ -75,15 +76,30 @@ function renderSubBreeds(houndList, e) {
       // console.log(liHound);
 
       liHound.addEventListener("click", function(e) {
-        window.location.hash = hound; // # BREEDEN
-        console.log("Hej");
-        let CloseParent = this.closest('.SubDogsInUl').parentElement.innerText; //**************************** få parenten att också lägga sig i
-        console.log(CloseParent);
+// PARENT + E-TARGET
+
+        // console.log(window.location.hash = `${li.innerText}-${hound}`); 
+        console.log(this.innerText);
+        let CloseParent = document.querySelector('.SubDogsInUl').parentElement.innerHTML; //****************** få parenten att också lägga sig i
+        // console.log(CloseParent);
+        let splitFrom = CloseParent.split('<');
+        // console.log(splitFrom[0]);
+        let subbName = splitFrom[0].toLowerCase() + '/' + hound;
+        console.log(subbName);
+        window.location.hash = subbName; 
+        console.log(dogId);
+
+
+        
+         
+        // if (e.target.parentNode.className.includes("SubDogsInUl")) {
+        //   return;
+        // }
         // console.log(this.closest('.SubDogsInUl').parentElement);
         // ulBreed.innerHTML = "";
         // 3 olika hund bilder
         createHeadline(hound); //
-        getSubBreedImg(hound); // + Breeden (parent)
+        getSubBreedImg(subbName); // + Breeden (parent)
       });
     }
   }
@@ -93,7 +109,7 @@ function renderSubBreeds(houndList, e) {
 function createHeadline(dog) {
   let h1 = document.querySelector("main h1");
   h1.innerHTML = "";
-  h1.textContent = dog.replace(/^./, dog[0].toUpperCase());
+  h1.textContent = capitalize(dog);
 }
 
 // Tillbaka till startsidan
@@ -127,9 +143,9 @@ function getHoundList(dogBreed, e) {
 function createDogsIMG(img) {
   let div = document.createElement("div");
   let p = document.createElement("p");
-  let breedText = img.toUpperCase().split("/");
+  let breedText = img.split("/");
   // console.log(breedText);
-  p.textContent = breedText[4];
+  p.textContent = capitalize(breedText[4]);
 
   //   console.log(img);
   let imgDom = document.createElement("img");
@@ -158,9 +174,9 @@ function renderAllDogsIMG(allIMGS) {
 
   let newDogs = document.createElement("button");
   newDogs.textContent = "Get new dogs";
-  // newDogs.addEventListener("click", function() {
-  //   getAllDogsImg();
-  // });
+  newDogs.addEventListener("click", function() {
+    getAllDogsImg();
+  });
   containerImg.appendChild(newDogs);
 
   // console.log(allIMGS);
@@ -172,22 +188,21 @@ function renderAllDogsIMG(allIMGS) {
       containerImg.appendChild(imgDog);
     }
   }
-  return newDogs;
 }
 
 // // // Render breeds dog IMG
 function renderBreedsDogsIMG(allIMGS) {
   let containerImg = document.querySelector(".imgContainer");
   containerImg.innerHTML = "";
-  // let newDogs = document.createElement("button");
-  // newDogs.textContent = "Get new dogs";
-  // containerImg.appendChild(newDogs);
+  let newDogs = document.createElement("button");
+  newDogs.textContent = "Get new dogs";
+  containerImg.appendChild(newDogs);
 
   // console.log(allIMGS);
   for (let img of allIMGS) {
     //     // slica ut img
     let breed = img.split("/"); // tar ut breeden från img strängen
-    console.log(breed[4]);
+    // console.log(breed[4]);
     newDogs.addEventListener("click", function() {
       // random breeds bilder
       getBreedImg(breed[4]);
@@ -223,9 +238,11 @@ function getBreedImg(breed) {
 
 // GET SUB_BREED IMG
 //https://dog.ceo/api/breed/hound/afghan/images
-function getSubBreedImg(breed, hound) {
-  console.log('Input GET breed' + breed);
-  axios.get(`${BASE_URL}breed/${breed}-${hound} /images/random/3`).then(response => {
+// https://dog.ceo/api/breed/hound/afghan/images/random/3
+//https://dog.ceo/api/cattledog/australian/images/random/3
+function getSubBreedImg(hound) {
+  // console.log('Input GET breed' + breed);
+  axios.get(`${BASE_URL}${hound}/images/random/3`).then(response => {
     let allIMGS = response.data.message;
     // console.log('IMG breeds ' + allIMGS);
     renderBreedsDogsIMG(allIMGS);
