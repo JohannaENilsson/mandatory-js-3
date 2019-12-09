@@ -242,7 +242,7 @@ function getBreedImg(breed) {
 //https://dog.ceo/api/cattledog/australian/images/random/3
 function getSubBreedImg(hound) {
   // console.log('Input GET breed' + breed);
-  axios.get(`${BASE_URL}${hound}/images/random/3`).then(response => {
+  axios.get(`${BASE_URL}breed/${hound}/images/random/3`).then(response => {
     let allIMGS = response.data.message;
     // console.log('IMG breeds ' + allIMGS);
     renderBreedsDogsIMG(allIMGS);
